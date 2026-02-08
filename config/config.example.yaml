@@ -1,0 +1,78 @@
+# Example configuration file for Surveillance Detection Project
+# Copy to config/config.yaml (or project root config.yaml) and modify as needed.
+# All keys are optional; scripts fall back to CLI defaults when config is missing.
+
+# -----------------------------------------------------------------------------
+# Paths
+# -----------------------------------------------------------------------------
+paths:
+  data_dir: "./data"           # Default data directory
+  output_dir: "./output"       # Default output directory for exports
+  model_weights_dir: "./weights"
+  logs_dir: "./logs"
+
+# -----------------------------------------------------------------------------
+# Detection (image/video/live)
+# -----------------------------------------------------------------------------
+detection:
+  score_threshold: 0.5         # Min confidence to keep detections (0.0–1.0)
+  device: "cuda"               # "cuda", "cpu", or "auto"
+  use_fp16: false              # Half precision on GPU (faster, less memory)
+  batch_size: 4                # Video: frames per batch
+  every_n_frames: 1            # Video: run detection every N frames
+  class_filter: []             # COCO classes to keep, e.g. ["person", "car"]. [] = all
+  model_type: "fasterrcnn_resnet50_fpn_v2"   # Better accuracy. Options: fasterrcnn_resnet50_fpn, fasterrcnn_resnet50_fpn_v2, retinanet_resnet50_fpn, retinanet_resnet50_fpn_v2, fcos_resnet50_fpn
+  use_tta: false               # Test-time augmentation (multi-scale + flip) for higher accuracy
+  robust_preprocess: false     # Weather-robust preprocessing (CLAHE + denoise) for low light/fog/rain
+  checkpoint_path: null        # Path to fine-tuned checkpoint (from train_detector.py)
+
+# -----------------------------------------------------------------------------
+# Video processing (create_video_from_images, etc.)
+# -----------------------------------------------------------------------------
+video:
+  default_fps: 24
+  default_codec: "mp4v"
+  default_output_format: "mp4"
+
+# -----------------------------------------------------------------------------
+# Image processing
+# -----------------------------------------------------------------------------
+image:
+  default_width: 1248
+  default_height: 384
+  center_offset_x: -30
+  center_offset_y: 80
+
+# -----------------------------------------------------------------------------
+# Models (HRFuser, SAF-FCOS, MT-DETR)
+# -----------------------------------------------------------------------------
+models:
+  hrfuser:
+    input_size: [1248, 384]
+    checkpoint_path: null
+  saf_fcos:
+    input_size: [640, 360]
+    checkpoint_path: null
+  mt_detr:
+    input_size: [1248, 384]
+    checkpoint_path: null
+
+# -----------------------------------------------------------------------------
+# Datasets
+# -----------------------------------------------------------------------------
+datasets:
+  nuscenes:
+    data_path: null
+    version: "v1.0-trainval"
+  kitti:
+    data_path: null
+  dense:
+    data_path: null
+
+# -----------------------------------------------------------------------------
+# Processing
+# -----------------------------------------------------------------------------
+processing:
+  max_workers: 4
+  batch_size: 1
+  use_gpu: true
